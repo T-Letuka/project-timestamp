@@ -36,13 +36,16 @@ app.get("/api/:date?", (req, res) => {
   if (!dateParam) {
     date = new Date();
   } else {
+    // Check if dateParam is a valid date string or a Unix timestamp
     date = new Date(dateParam);
 
-    if (isInvalidDate(date)) {
+    // If date is invalid and dateParam is an integer, parse it as a Unix timestamp
+    if (isInvalidDate(date) && !isNaN(dateParam)) {
       date = new Date(parseInt(dateParam));
     }
   }
 
+  // If date is still invalid, return error
   if (isInvalidDate(date)) {
     res.json({ error: "Invalid Date" });
   } else {
